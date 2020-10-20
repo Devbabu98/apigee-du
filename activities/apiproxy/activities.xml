@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="10" name="activities">
+    <Basepaths>/v1/activities</Basepaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1496057258475</CreatedAt>
+    <CreatedBy>apigeeejenkins@du.ae</CreatedBy>
+    <Description>jenkins git: 45f0ea97 imp1dvtde10 ::sgagandeep git revision unknown Kaarlp-617 ::Activities API</Description>
+    <DisplayName>activities</DisplayName>
+    <LastModifiedAt>1496057258475</LastModifiedAt>
+    <LastModifiedBy>apigeeejenkins@du.ae</LastModifiedBy>
+    <Policies>
+        <Policy>AM-AccessTokenExpired</Policy>
+        <Policy>AM-AccessTokenRevoked</Policy>
+        <Policy>AM-AuthenticationError</Policy>
+        <Policy>AM-BadRequestError</Policy>
+        <Policy>AM-BuildSelfcareActivityPayload</Policy>
+        <Policy>AM-GatewayTimeoutFault</Policy>
+        <Policy>AM-InvalidAPICallNoProductFound</Policy>
+        <Policy>AM-InvalidAccessToken</Policy>
+        <Policy>AM-PingResponsePayload</Policy>
+        <Policy>AM-QuotaExceededFault</Policy>
+        <Policy>AM-ResetRequestVerbToNBRequestVerb</Policy>
+        <Policy>AM-ResourceNotFoundFlowFault</Policy>
+        <Policy>AM-ServiceNotFoundFault</Policy>
+        <Policy>AM-SetContentTypeHeader</Policy>
+        <Policy>AM-SetGlobalVariables</Policy>
+        <Policy>AM-SpikeArrestFault</Policy>
+        <Policy>AM-UnhandledExceptionFault</Policy>
+        <Policy>EV-GetJsonPayloadVariables</Policy>
+        <Policy>JSC-CalculatePingResponseTime</Policy>
+        <Policy>JSC-CheckMandatoryParams</Policy>
+        <Policy>JSC-CleanJsonResponse</Policy>
+        <Policy>JSC-ContentTypeHeaderNotSupported</Policy>
+        <Policy>JSC-GenerateRequestId</Policy>
+        <Policy>JSC-LCEResponseCodeMappings</Policy>
+        <Policy>JSC-PopulateHttpHeadersWithSoapHeaders</Policy>
+        <Policy>JSC-RemoveTargetPathsuffix</Policy>
+        <Policy>KVM-GetTargetConfigurations</Policy>
+        <Policy>OA-VerifyAccessToken</Policy>
+        <Policy>QT-DeveloperQuotaCheck</Policy>
+        <Policy>RF-GenericFaultHandler</Policy>
+        <Policy>SA-SpikeArrestCheck</Policy>
+        <Policy>X2J-XmlToJsonResponse</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>jsc://JSC-CalculatePingResponseTime.js</Resource>
+        <Resource>jsc://JSC-CheckMandatoryParams.js</Resource>
+        <Resource>jsc://JSC-CleanJsonResponse.js</Resource>
+        <Resource>jsc://JSC-ContentTypeHeaderNotSupported.js</Resource>
+        <Resource>jsc://JSC-GenerateRequestId.js</Resource>
+        <Resource>jsc://JSC-LCEResponseCodeMappings.js</Resource>
+        <Resource>jsc://JSC-PopulateHttpHeadersWithSoapHeaders.js</Resource>
+        <Resource>jsc://JSC-RemoveTargetPathsuffix.js</Resource>
+        <Resource>jsc://Math.uuid.js</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>mce</TargetEndpoint>
+        <TargetEndpoint>mock</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>true</validate>
+</APIProxy>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <DefaultFaultRule name="DefaultFaultRule">
+    <Step>
+        <FaultRules/>
+        <Name>RF-GenericFaultHandler</Name>
+    </Step>
+    <AlwaysEnforce>true</AlwaysEnforce>
+</DefaultFaultRule>
+    <FaultRules>
+        <FaultRule name="generic_unhandled_exceptions_fault">
+    <Condition>(api-error.message = null) or (api-error.message == "")</Condition>
+    <Step>
+        <FaultRules/>
+        <Name>AM-UnhandledExceptionFault</Name>
+    </Step>
+</FaultRule>
+        <FaultRule name="invalid_access_token">
+  <Condition>( fault.name = "invalid_access_token") or ( fault.name = "InvalidAccessToken")</Condition>
+  <Step>
+    <Name>AM-InvalidAccessToken</Name>
+  </Step>
+</FaultRule>
+<FaultRule name="access_token_revoked">
+  <Condition>( fault.name = "access_token_expired")</Condition>
+  <Step>
+    <Name>AM-AccessTokenExpired</Name>
+  </Step>
+</FaultRule>
+<FaultRule name="access_token_not_approved">
+  <Condition>( fault.name = "access_token_not_approved")</Condition>
+  <Step>
+    <Name>AM-AccessTokenRevoked</Name>
+  </Step>
+</FaultRule>
+<FaultRule name="InvalidAPICallAsNoApiProductMatchFound">
+  <Condition>( fault.name = "InvalidAPICallAsNoApiProductMatchFound")</Condition>
+  <Step>
+    <Name>AM-InvalidAPICallNoProductFound</Name>
+  </Step>
+</FaultRule>
+        <FaultRule name="spike_arrest_fault">
+  <Condition>( fault.name = "SpikeArrestViolation")</Condition>
+  <Step>
+    <Name>AM-SpikeArrestFault</Name>
+  </Step>
+</FaultRule>
+<FaultRule name="quota_voilation_fault">
+  <Condition>( fault.name = "QuotaViolation")</Condition>
+  <Step>
+    <Name>AM-QuotaExceededFault</Name>
+  </Step>
+</FaultRule>
+
+    </FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step> 
+                <Name>KVM-GetTargetConfigurations</Name>
+            </Step>
+        <Step>
+    <Name>SA-SpikeArrestCheck</Name>
+</Step>
+<Step>
+	<Name>OA-VerifyAccessToken</Name>
+</Step>
+<Step>
+    <Name>QT-DeveloperQuotaCheck</Name>
+</Step>
+<!-- <Step>
+	<Condition>(( request.header.Content-Type != "application/json") or ( request.header.content-type != "application/json")) and ( (request.header.content-type != null) or ( request.header.Content-Type != null ))</Condition>
+	<Name>JSC-ContentTypeHeaderNotSupported</Name>
+</Step> -->
+<!-- The Content-Type header sent by the user will be ignored and "application/json" will be assigned for GET,POST and PUT requests -->
+<Step>
+	<Name>AM-SetContentTypeHeader</Name>
+	<Condition>(request.verb = "POST") or ( request.verb = "PUT") or ( request.verb = "DELETE")</Condition>
+</Step>
+<Step>
+	<Name>AM-SetGlobalVariables</Name>
+</Step>
+<Step>
+	<Name>JSC-GenerateRequestId</Name>
+</Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="Ping Resource">
+	<Description>Ping Resource for API monitoring</Description>
+    <Request>
+    	<Step>
+			<Name>JSC-CalculatePingResponseTime</Name>
+		</Step>
+		<Step>
+			<Name>AM-PingResponsePayload</Name>
+		</Step>
+    </Request>
+    <Response>
+    </Response>	
+    <Condition>(proxy.pathsuffix JavaRegex "/ping(/?)$") and (request.verb = "GET")</Condition>
+</Flow>
+        <!-- Add the conditional flows here -->
+        <Flow name="CreateSeflcareActivity">
+            <Description>Create Selfcare Activity</Description>
+            <Request>
+                <Step>
+                    <Name>EV-GetJsonPayloadVariables</Name>
+                </Step>
+                <Step>
+                    <Name>JSC-CheckMandatoryParams</Name>
+                </Step>
+                <Step>
+                    <Name>AM-BuildSelfcareActivityPayload</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix JavaRegex "(/?)$") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="UnknownResource">
+    <Request>
+        <Step>
+            <FaultRules/>
+            <Name>AM-ResourceNotFoundFlowFault</Name>
+        </Step>
+    </Request>
+    <Response/>
+</Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+    <Name>X2J-XmlToJsonResponse</Name>
+    <Condition>(response.status.code = "200" or response.status.code = "201")</Condition>
+</Step>
+<Step>
+    <Name>JSC-CleanJsonResponse</Name>
+    <Condition>(response.status.code = "200" or response.status.code = "201")</Condition>
+</Step>
+<Step>
+	<Name>JSC-LCEResponseCodeMappings</Name>
+	<Condition>(response.status.code = "200" or response.status.code = "201")</Condition>
+</Step>
+<Step>
+    <Name>JSC-PopulateHttpHeadersWithSoapHeaders</Name>
+    <Condition>( responseType = "headers") and (response.status.code = "200" or response.status.code = "201")</Condition>
+</Step>
+        </Response>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/activities</BasePath>
+        <Properties/>
+        <VirtualHost>default</VirtualHost>
+        <!-- Comment/Remove the Virtual Host-secure while deploying API Proxy in Organization dudev -->
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="ping-pong">
+     <Condition>(proxy.pathsuffix JavaRegex "/ping(/?)$") and (request.verb = "GET")</Condition>
+</RouteRule>
+    <RouteRule name="mock">
+        <TargetEndpoint>mock</TargetEndpoint>
+        <Condition>(du.config.request.mock = "true")</Condition>
+    </RouteRule>
+    <RouteRule name="mce">
+        <TargetEndpoint>mce</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>
