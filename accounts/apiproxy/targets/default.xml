@@ -60,7 +60,7 @@
     <LoadBalancer>
         <MaxFailures>0</MaxFailures>
         <RetryEnabled>true</RetryEnabled>
-        <Server name="preprod-mce-target">
+        <Server name="test">
             <IsEnabled>true</IsEnabled>
             <IsFallback>false</IsFallback>
             <Weight>1</Weight>
