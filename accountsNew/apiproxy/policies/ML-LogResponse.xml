@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MessageLogging async="false" continueOnError="false" enabled="true" name="ML-LogResponse">
+    <DisplayName>ML-LogResponse</DisplayName>
+    <File>
+        <Message>{message.header.timestamp} - LOG - INFO: {originalReq}</Message>
+        <FileName>log.log</FileName>
+        <FileRotationOptions rotateFileOnStartup="true">
+            <FileRotationType>SIZE</FileRotationType>
+            <MaxFileSizeInMB>10</MaxFileSizeInMB>
+            <MaxFilesToRetain>10</MaxFilesToRetain>
+        </FileRotationOptions>
+    </File>
+    <logLevel>INFO</logLevel>
+</MessageLogging>

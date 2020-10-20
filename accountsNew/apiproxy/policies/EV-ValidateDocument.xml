@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-ValidateDocument">
+    <DisplayName>EV-ValidateDocument</DisplayName>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Source>request.content</Source>
+    <JSONPayload>
+        <Variable name="du.customerCode" type="string">
+            <JSONPath>$.customerCode</JSONPath>
+        </Variable>
+        <Variable name="du.documentNumber" type="string">
+            <JSONPath>$.documentNumber</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>

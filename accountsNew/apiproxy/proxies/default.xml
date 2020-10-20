@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <DefaultFaultRule name="DefaultFaultRule">
+        <Step>
+            <Name>JS-ResponseTimestamp</Name>
+        </Step>
+        <Step>
+            <Name>AM-LogPayoad</Name>
+        </Step>
+        <Step>
+            <Name>AM-LogVariable</Name>
+        </Step>
+        <Step>
+            <Name>RF-GenericFaultHandler</Name>
+        </Step>
+        <AlwaysEnforce>true</AlwaysEnforce>
+    </DefaultFaultRule>
+    <FaultRules>
+        <FaultRule name="invalid_authorization">
+            <Condition>( fault.name = "invalid_access_token") or ( fault.name = "InvalidAccessToken")</Condition>
+            <Step>
+                <Name>AM-InvalidAuthorization</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="access_token_revoked">
+            <Condition>( fault.name = "access_token_not_approved")</Condition>
+            <Step>
+                <Name>AM-AccessTokenRevoked</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="access_token_expired">
+            <Condition>( fault.name = "access_token_expired")</Condition>
+            <Step>
+                <Name>AM-AccessTokenExpired</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="spike_arrest_fault">
+            <Condition>( fault.name = "SpikeArrestViolation")</Condition>
+            <Step>
+                <Name>AM-SpikeArrestFault</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="quota_violation_fault">
+            <Condition>( fault.name = "QuotaViolation")</Condition>
+            <Step>
+                <Name>AM-QuotaExceededFault</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="parsing_fault">
+            <Condition>( fault.name = "JsonPathParsingFailure")</Condition>
+            <Step>
+                <Name>AM-ParsingFault</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="unresolved_variable">
+            <Condition>( fault.name = "UnresolvedVariable")</Condition>
+            <Step>
+                <Name>AM-UnresolvedVariableFault</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="UnknownResources_fault">
+            <Condition>(raisefault.RF-UnknownResource.failed = true)</Condition>
+            <Step>
+                <Name>AM-UnknownResource</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>KV-Configuration</Name>
+            </Step>
+            <Step>
+                <Name>SA-SpikeArrestCheck</Name>
+            </Step>
+            <Step>
+                <Name>OA-VerifyAccessToken</Name>
+            </Step>
+            <Step>
+                <Name>QT-DeveloperQuotaCheck</Name>
+            </Step>
+            <Step>
+                <Name>KV-LogLevel</Name>
+            </Step>
+            <Step>
+                <Name>JS-LogConfig</Name>
+                <Condition>(du.config.logLevel != "NONE")</Condition>
+            </Step>
+            <Step>
+                <Name>KV-LogConfig</Name>
+                <Condition>(du.config.logLevel != "NONE")</Condition>
+            </Step>
+            <Step>
+                <Name>AM-LogLevelALL</Name>
+                <Condition>(du.config.logLevel = "ALL" and du.config.operationFlag = "true")</Condition>
+            </Step>
+            <Step>
+                <Name>AM-LogLevelERROR</Name>
+                <Condition>(du.config.logLevel = "ERROR" and du.config.operationFlag = "true")</Condition>
+            </Step>
+            <Step>
+                <Name>KVM-duAppAuthorization</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Name>JS-ResponseTimestamp</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <PostClientFlow>
+        <Request/>
+        <Response>
+            <Step>
+                <Name>ML-LogResponse</Name>
+                <Condition>du.isLogging.All = "true"</Condition>
+            </Step>
+            <Step>
+                <Name>ML-LogError</Name>
+                <Condition>(error != NULL) and (du.isLogging.All = "true" or du.isLogging.Error = "true")</Condition>
+            </Step>
+        </Response>
+    </PostClientFlow>
+    <Flows>
+        <Flow name="ValidateDocument">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-ValidateDocument</Name>
+                </Step>
+                <Step>
+                    <Name>EV-ValidateDocument</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>((proxy.pathsuffix MatchesPath "/document") and (request.verb = "GET")) or (du.DSLpath MatchesPath "/validateDocument")</Condition>
+        </Flow>
+        <Flow name="LinkAccount">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>JS-CheckCustomerCode</Name>
+                </Step>
+                <Step>
+                    <Name>EV-OriginalRequest</Name>
+                </Step>
+                <Step>
+                    <Name>EV-LinkAccount</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>JS-AssignResponse</Name>
+                </Step>
+                <Step>
+                    <Name>SC-LogTransactionLinkAccount</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/link") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="VerifyLinkedAccount">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>JS-CheckCustomerCode</Name>
+                </Step>
+                <Step>
+                    <Name>EV-VerifyLinkedAccount</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/verify") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="ReportAccount">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>JS-CheckCustomerCode</Name>
+                </Step>
+                <Step>
+                    <Name>EV-OriginalRequest</Name>
+                </Step>
+                <Step>
+                    <Name>EV-ReportAccount</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>JS-AssignResponse</Name>
+                </Step>
+                <Step>
+                    <Name>SC-LogTransactionReportAccount</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/report") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="DelinkAccount">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>JS-CheckCustomerCode</Name>
+                </Step>
+                <Step>
+                    <Name>EV-OriginalRequest</Name>
+                </Step>
+                <Step>
+                    <Name>EV-DelinkAccount</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>JS-AssignResponse</Name>
+                </Step>
+                <Step>
+                    <Name>SC-LogTransactionDelinkAccount</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/delink") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="UnknownResource">
+            <Request>
+                <Step>
+                    <Name>RF-UnknownResource</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+    </Flows>
+    <HTTPProxyConnection>
+        <BasePath>/v2/accounts</BasePath>
+        <Properties/>
+        <VirtualHost>default</VirtualHost>
+        <!-- Comment the secure Virtual Host while deploying in dev environment -->
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>

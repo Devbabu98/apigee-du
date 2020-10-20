@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-LinkAccount">
+    <DisplayName>EV-LinkAccount</DisplayName>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Source>request.content</Source>
+    <JSONPayload>
+        <Variable name="du.mainCustomerCode" type="string">
+            <JSONPath>$.mainCustomerCode</JSONPath>
+        </Variable>
+        <Variable name="du.customerCodesToLink" type="nodeset">
+            <JSONPath>$.customerCodesToLink</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>

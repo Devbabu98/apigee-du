@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Javascript async="false" continueOnError="false" enabled="true" timeLimit="1000" name="JS-AssignResponse">
+    <DisplayName>JS-AssignResponse</DisplayName>
+    <Properties/>
+    <ResourceURL>jsc://JS-AssignResponse.js</ResourceURL>
+</Javascript>

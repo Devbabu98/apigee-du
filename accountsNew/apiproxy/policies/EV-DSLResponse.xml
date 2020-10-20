@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-DSLResponse">
+    <DisplayName>EV-DSLResponse</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source>response.content</Source>
+    <JSONPayload>
+        <Variable name="du.DSLResponseCode" type="string">
+            <JSONPath>$.return.code</JSONPath>
+        </Variable>
+        <Variable name="du.DSLResponseMessage" type="string">
+            <JSONPath>$.return.messageResource.messageValue</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-VerifyLinkedAccount">
+    <DisplayName>EV-VerifyLinkedAccount</DisplayName>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Source>request.content</Source>
+    <JSONPayload>
+        <Variable name="du.OTPId" type="string">
+            <JSONPath>$.OTPId</JSONPath>
+        </Variable>
+        <Variable name="du.mainCustomerCode" type="string">
+            <JSONPath>$.mainCustomerCode</JSONPath>
+        </Variable>
+        <Variable name="du.customerCodesToBeVerified" type="nodeset">
+            <JSONPath>$.customerCodesToBeVerified</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>

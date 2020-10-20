@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations mapIdentifier="duAppCredentials-v1-config" async="false" continueOnError="false" enabled="true" name="KVM-duAppAuthorization">
+    <DisplayName>KVM-duAppAuthorization</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Get assignTo="du.config.authorization">
+        <Key>
+            <Parameter>Authorization</Parameter>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

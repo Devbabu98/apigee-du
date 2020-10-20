@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations mapIdentifier="targetsystems-v1-config" async="false" continueOnError="false" enabled="true" name="KV-Configuration">
+    <DisplayName>KV-Configuration</DisplayName>
+    <Properties/>
+    <Get assignTo="du.config.spikeArrest">
+        <Key>
+            <Parameter>spikeArrest</Parameter>
+        </Key>
+    </Get>
+    <Get assignTo="du.config.quotaLimit">
+        <Key>
+            <Parameter>quotaLimit</Parameter>
+        </Key>
+    </Get>
+    <Get assignTo="du.config.quotaInterval">
+        <Key>
+            <Parameter>quotaInterval</Parameter>
+        </Key>
+    </Get>
+    <Get assignTo="du.config.quotaTimeUnit">
+        <Key>
+            <Parameter>quotaTimeUnit</Parameter>
+        </Key>
+    </Get>
+    <!-- ADD KVMs keys accordingly to your needs-->
+    <Get assignTo="du.config.dslTargetBasepath">
+        <Key>
+            <Parameter>dslTargetBasepath</Parameter>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

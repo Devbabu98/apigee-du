@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="default">
+    <Description/>
+    <DefaultFaultRule name="DefaultFaultRule">
+        <Step>
+            <Name>JS-ResponseTimestamp</Name>
+        </Step>
+        <Step>
+            <Name>RF-GenericFaultHandler</Name>
+        </Step>
+        <AlwaysEnforce>true</AlwaysEnforce>
+    </DefaultFaultRule>
+    <FaultRules>
+        <FaultRule name="unhandled_exception_fault">
+            <Step>
+                <FaultRules/>
+                <Name>AM-UnhandledFault</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>AM-RemoveTargetPathSuffix</Name>
+            </Step>
+            <Step>
+                <Name>JS-dslPath</Name>
+            </Step>
+            <Step>
+                <Name>KV-dslPath</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Name>EV-DSLResponse</Name>
+            </Step>
+            <Step>
+                <Name>AM-DSLSuccess</Name>
+                <Condition>(du.DSLResponseCode == "200")</Condition>
+            </Step>
+            <Step>
+                <Name>AM-DSLError</Name>
+                <Condition>(du.DSLResponseCode != "200")</Condition>
+            </Step>
+            <Step>
+                <Name>JS-ResponseTimestamp</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <Flows/>
+    <!--To be replaced by the respective target system -->
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <MaxFailures>0</MaxFailures>
+            <RetryEnabled>true</RetryEnabled>
+            <Server name="dsl-target">
+                <IsEnabled>true</IsEnabled>
+                <IsFallback>false</IsFallback>
+                <Weight>1</Weight>
+            </Server>
+        </LoadBalancer>
+        <Path>{du.config.dslTargetBasepath}{du.DSLpath}</Path>
+        <Properties>
+            <Property name="enable.method.override">true</Property>
+            <Property name="GET.override.method">POST</Property>
+        </Properties>
+    </HTTPTargetConnection>
+</TargetEndpoint>

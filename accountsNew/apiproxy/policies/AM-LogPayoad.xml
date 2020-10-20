@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-LogPayoad">
+    <DisplayName>AM-LogPayoad</DisplayName>
+    <Properties/>
+    <Set>
+        <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+               {"headers": {
+                   "transaction-id": "@request.header.transaction-id#",
+                   "device": "@request.header.device#",
+                   "app-version": "@request.header.app-version#",
+                   "platform": "@request.header.platform#",
+                   "channel": "@request.header.channel#",
+                   "request-timestamp": "@request.header.timestamp#",
+                   "response-timestamp": "@response.header.timestamp#"
+               },
+               "request": @request.content#@request.querystring#,
+               "response": @message.content#
+               }
+           </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="http" type="request">logObj</AssignTo>
+</AssignMessage>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault async="false" continueOnError="false" enabled="true" name="RF-GenericFaultHandler">
+    <DisplayName>RF-GenericFaultHandler</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <FaultResponse>
+        <Set>
+            <Headers>
+                <Header name="Content-Type">application/json</Header>
+                <Header name="transaction-id">{request.header.transaction-id}</Header>
+                <Header name="device">{request.header.device}</Header>
+                <Header name="app-version">{request.header.app-version}</Header>
+                <Header name="platform">{request.header.platform}</Header>
+                <Header name="channel">{request.header.channel}</Header>
+                <Header name="timestamp">{du.responsetimestamp}</Header>
+            </Headers>
+            <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">{ "error": { "code": "@api-error.status_code#","message": "@api-error.reason_phrase#" } }
+            </Payload>
+            <StatusCode>{api-error.status_code}</StatusCode>
+            <ReasonPhrase>{api-error.reason_phrase}</ReasonPhrase>
+        </Set>
+    </FaultResponse>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

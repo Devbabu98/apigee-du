@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="true" continueOnError="true" enabled="true" name="SC-LogTransactionDelinkAccount">
+    <DisplayName>SC-LogTransactionDelinkAccount</DisplayName>
+    <Properties/>
+    <Request clearPayload="true" variable="logRequest">
+        <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+        <Set>
+            <Headers>
+                <Header name="Content-Type">application/json</Header>
+                <Header name="Authorization">Basic {du.config.authorization}</Header>
+            </Headers>
+            <Verb>POST</Verb>
+            <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+                {"headers": {
+                    "transaction-id": "@request.header.transaction-id#",
+                    "device": "@request.header.device#",
+                    "app-version": "@request.header.app-version#",
+                    "platform": "@request.header.platform#",
+                    "channel": "@request.header.channel#",
+                    "request-timestamp": "@requestTimestamp#",
+                    "response-timestamp": "@responseTimestamp#"
+                    
+                    ,
+                    "rateplan_all": "@request.header.rateplan_all.values#",
+                    "msisdn_all": "@request.header.msisdn_all.values#",
+                    "account_code": "@request.header.account_code#",
+                    "rateplan_contract": "@request.header.rateplan_contract#",
+                    "customer_segment": "@request.header.customer_segment#",
+                    "contract_type": "@request.header.contract_type#",
+                    "transaction": "@request.header.transaction#",
+                    "platform": "@request.header.platform#"
+                },
+                "request": @du.originalRequest#, 
+                "response": @du.response#
+                }
+            </Payload>
+        </Set>
+    </Request>
+    <Response>calloutResponse</Response>
+    <LocalTargetConnection>
+        <Path>/v1/transactions/log-delinkaccount</Path>
+    </LocalTargetConnection>
+</ServiceCallout>

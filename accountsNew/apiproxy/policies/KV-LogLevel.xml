@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KV-LogLevel" mapIdentifier="logs-v1-config">
+    <DisplayName>KV-LogLevel</DisplayName>
+    <ExpiryTimeInSecs>0</ExpiryTimeInSecs>
+    <!--No cache-->
+    <!--Key to validate which kind of log is to be applied. Possible values: NONE, ERROR, ALL.. If Log level is NONE The JavaScript policy will not run! Neither the Log ones-->
+    <Get assignTo="du.config.logLevel">
+        <Key>
+            <Parameter>logLevel</Parameter>
+        </Key>
+    </Get>
+    <Scope>environment</Scope>
+</KeyValueMapOperations>

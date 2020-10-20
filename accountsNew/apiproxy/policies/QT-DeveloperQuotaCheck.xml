@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quota type="calendar" async="false" continueOnError="false" enabled="true" name="QT-DeveloperQuotaCheck">
+    <DisplayName>QT-DeveloperQuotaCheck</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Allow count="5000" countRef="du.config.quotaLimit"/>
+    <Interval ref="du.config.quotaInterval">1</Interval>
+    <DataStoreFailureModeOpen>false</DataStoreFailureModeOpen>
+    <Distributed>true</Distributed>
+    <PreciseAtSecondsLevel>false</PreciseAtSecondsLevel>
+    <StartTime>2016-8-11 12:00:00</StartTime>
+    <Synchronous>true</Synchronous>
+    <TimeUnit ref="du.config.quotaTimeUnit">minute</TimeUnit>
+</Quota>
